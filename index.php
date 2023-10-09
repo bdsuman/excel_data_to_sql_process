@@ -15,42 +15,60 @@ require("simplexlsx/SimpleXLSX.php");
     // [3] => Rina houladar
     // [4] => 01712-389733
     // [5] => Islam
-$con = mysqli_connect('localhost','root','suman','jahanara');
-$data_path = 'data/Class-10.xlsx';
-$id = 230203;
+$con = mysqli_connect('localhost','root','suman','eschool_vidamoyee');
+$data_path = 'data/class-10.xlsx';
+$id = 230001;
             if ($xlsx = SimpleXLSX::parse($data_path)) {       
                     foreach($xlsx->rows() as $key=>$value) {
-                        // debug($value);
+                         //debug($value);
+                         //echo '<br>';
                         $StuId = $id++;
-                        $data['roll'] = $value[0];
+                        $data['shift'] = $value[1];
+                        $Shift = $value[1];
+                        $data['section'] = $value[3];
+                        $Section = $value[3];
+                        $data['roll'] = $value[4];
+                        $Roll = $value[4];
+                        $data['blood_group'] =  trim($value[11]);
+                        $blood_group = trim($value[11]);
+                        $data['gurdian_profession'] = strtoupper($value[12]);
+                        $gurdian_profession = addslashes($value[12]);
+                        $data['quota'] = $value[13];
+                        $quota = $value[13]??'';
+                        $data['co_curriculum_activities'] = addslashes(strtoupper($value[14]));
+                        $co_curriculum_activities = addslashes(strtoupper($value[14]))??'';
                         $StuGroup = $value[7]??'General';
-                        $fourth = $value[6]??'';
+                        //$StuGroup = 'General';
+                        $fourth = $value[5]??'';
+                        $data['fourth'] = $fourth;
                         $data['StuGroup'] = $StuGroup;
-                        $StuName= ucwords($value[1]);
+                        $StuName= strtoupper($value[0]);
                         $data['StuName'] = $StuName;
-                        $FName = ucwords($value[2]);
+                        $FName = strtoupper($value[8]);
                         $data['FName'] = $FName;
-                        $MName = ucwords($value[3]);
+                        $MName = strtoupper($value[9]);
                         $data['MName'] = $MName;
-                        $mobile = str_replace('-','',$value[4])??0;
+                        //$gender = ucwords($value[4]);
+                        $religion = ucfirst($value[6]);
+                        $mobile = str_replace('-','',$value[10])??0;
                         $data['mobile'] = $mobile;
-                        $data['Religion'] = $value[5];
+                        $data['Religion'] = ucwords($value[6]);
                         $dataPer['per_address']=[
-                            'per_district'=>'Netrokona',
-                            'per_upazila'=>'Sadar',
-                            'per_post_office'=>'Sadar',
+                            'per_district'=>'',
+                            'per_upazila'=>'',
+                            'per_post_office'=>'',
                             'per_village'=>''
                           ];
                         $PerAdd= json_encode($dataPer,JSON_FORCE_OBJECT);
 
-                        // debug($data);
-                        $sql="INSERT INTO `stuinfo`(`ID`, `InsID`, `StuYear`, `StuID`, `StuName`, `FName`, `MName`,`mobile`, `DOB`, `Religion`, `Gender`, `PreAdd`, `PerAdd`, `AdmissionDate`,`image`,`entryBy`) VALUES 
-                        (null,113139,2023,'$StuId','$StuName','$FName','$MName','$mobile','0000-00-00','$value[5]','Female','$PerAdd','$PerAdd','2023-01-01','','jahanara')";
-                        //   echo '<br><br>';
-                        $result=$con->query($sql);
-                        $sqlClass="INSERT INTO `stuclassinfo`(`ID`, `InsID`, `StuYear`, `ClassName`, `StuID`, `Roll`, `Section`, `Shift`, `StuGroup`, `FourthSub`, `SubjectsTaken`, `PromotionType`,`Status`,`entryBy`) VALUES 
-                        (null,113139,2023,'X','$StuId','$value[0]','A','Day','$StuGroup','$fourth','','Admited','Regular','jahanara')";
-                        $resultClass=$con->query($sqlClass);
+                        //debug($data);
+                         $sql="INSERT INTO `stuinfo`(`ID`, `InsID`, `StuYear`, `StuID`, `StuName`, `FName`, `MName`, `mobile`, `DOB`, `Religion`, `Gender`, `blood_group`, `gurdian_profession`, `co_curriculum_activities`, `PreAdd`, `PerAdd`, `AdmissionDate`, `image`, `entryBy`) values
+                        (null,111842,2023,'$StuId','$StuName','$FName','$MName','$mobile','0000-00-00','$religion','Female','$blood_group','$gurdian_profession','$co_curriculum_activities','$PerAdd','$PerAdd','2023-01-01','','admin')";
+//                           echo '<br><br>';
+                       $result=$con->query($sql);
+                       $sqlClass="INSERT INTO `stuclassinfo`(`ID`, `InsID`, `StuYear`, `ClassName`, `StuID`, `Roll`, `Section`, `Shift`, `StuGroup`, `FourthSub`, `SubjectsTaken`, `PromotionType`,`Status`,`entryBy`) VALUES
+                        (null,111842,2023,'X','$StuId','$Roll','$Section','$Shift','$StuGroup','$fourth','','Admited','Regular','admin')";
+                      $resultClass=$con->query($sqlClass);
                     }
             }else {
                 echo SimpleXLSX::parseError();
