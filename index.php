@@ -16,43 +16,46 @@ require("simplexlsx/SimpleXLSX.php");
     // [4] => 01712-389733
     // [5] => Islam
 $con = mysqli_connect('localhost','root','suman','eschool_vidamoyee');
-$data_path = 'data/Vidamoyee (Latest).xlsx';
-$id = 230001;
+$data_path = 'data/Vidamoyee Student Data 2023 Class (4_5_6_7_8) (Responses).xlsx';
+exit();
+$id = 230325;
             if ($xlsx = SimpleXLSX::parse($data_path)) {       
                     foreach($xlsx->rows() as $key=>$value) {
                          //debug($value);
                          //echo '<br>';
                         $StuId = $id++;
                         $data['shift'] = $value[1];
+                        $class = $value[2];
+                        $data['class'] = $value[2];
                         $Shift = $value[1];
                         $data['section'] = $value[3];
                         $Section = $value[3];
                         $data['roll'] = intval($value[4]);
                         $Roll = intval($value[4]);
-                        $data['blood_group'] =  str_replace("\r\n",'', $value[11]);
-                        $blood_group = str_replace("\r\n",'', $value[11]);
-                        $data['gurdian_profession'] = strtoupper($value[12]);
-                        $gurdian_profession = addslashes($value[12]);
-                        $data['quota'] = $value[13];
-                        $quota = $value[13]??'';
-                        $data['co_curriculum_activities'] = addslashes(strtoupper($value[14]));
-                        $co_curriculum_activities = addslashes(strtoupper($value[14]))??'';
-                        $StuGroup = $value[7]??'General';
+                        $data['blood_group'] =  str_replace("\r\n",'', $value[9]);
+                        $blood_group = str_replace("\r\n",'', $value[9]);
+                        $data['gurdian_profession'] = strtoupper($value[10]);
+                        $gurdian_profession = addslashes($value[10]);
+                        $data['quota'] = $value[11];
+                        $quota = $value[11]??'';
+                        $data['co_curriculum_activities'] = addslashes(strtoupper($value[12]));
+                        $co_curriculum_activities = addslashes(strtoupper($value[12]))??'';
+                        $StuGroup = $value[14]??'General';
                         //$StuGroup = 'General';
-                        $fourth = intval($value[5])??'';
+                        $fourth = intval($value[13])??'';
                         $data['fourth'] = $fourth;
                         $data['StuGroup'] = $StuGroup;
                         $StuName= strtoupper($value[0]);
                         $data['StuName'] = $StuName;
-                        $FName = strtoupper($value[8]);
+                        $FName = strtoupper($value[6]);
                         $data['FName'] = $FName;
-                        $MName = strtoupper($value[9]);
+                        $MName = strtoupper($value[7]);
                         $data['MName'] = $MName;
                         //$gender = ucwords($value[4]);
-                        $religion = ucfirst($value[6]);
-                        $mobile = intval(str_replace('-','',$value[10]))??0;
+                        $religion = ucfirst($value[5]);
+                        $mobile = intval(str_replace('-','',$value[8]))??0;
                         $data['mobile'] = $mobile;
-                        $data['Religion'] = ucwords($value[6]);
+                        $data['Religion'] = ucwords($value[5]);
                         $dataPer['per_address']=[
                             'per_district'=>'',
                             'per_upazila'=>'',
@@ -67,7 +70,7 @@ $id = 230001;
 //                           echo '<br><br>';
                        $result=$con->query($sql);
                        $sqlClass="INSERT INTO `stuclassinfo`(`ID`, `InsID`, `StuYear`, `ClassName`, `StuID`, `Roll`, `Section`, `Shift`, `StuGroup`, `FourthSub`, `SubjectsTaken`, `PromotionType`,`Status`,`entryBy`) VALUES
-                        (null,111842,2023,'X','$StuId','$Roll','$Section','$Shift','$StuGroup','$fourth','','Admited','Regular','admin')";
+                        (null,111842,2023,'$class','$StuId','$Roll','$Section','$Shift','$StuGroup','$fourth','','Admited','Regular','admin')";
                       $resultClass=$con->query($sqlClass);
                     }
             }else {
