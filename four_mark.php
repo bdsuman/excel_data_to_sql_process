@@ -32,7 +32,7 @@ class Converter
 }
 
 $con = mysqli_connect('localhost','root','suman','eschool_vidamoyee');
-$data_path = 'data/ix-all-result-science.xlsx';
+$data_path = 'data/iv-all-result.xlsx';
             if ($xlsx = SimpleXLSX::parse($data_path)) {       
                     foreach($xlsx->rows() as $key=>$value) {
                         if(0==$key){
@@ -40,14 +40,14 @@ $data_path = 'data/ix-all-result-science.xlsx';
                         }
 
                          //debug($value);
-                       //  echo '<br>';
+                         //echo '<br>';
                         $StuID = $value[0];
                         $data['StuID'] = $StuID;
                         $shift = $value[1];
                         $data['shift'] = $shift;
                         $group = $value[2];
 
-                        $class = 'IX';//change korte hobe kheyal rekhe kaj korte hobe
+                        $class = 'IV';//change korte hobe kheyal rekhe kaj korte hobe
                         $data['class'] = $class;
 
                         $data['group'] = $group;
@@ -55,22 +55,22 @@ $data_path = 'data/ix-all-result-science.xlsx';
                         $data['section'] = $section;
                         $roll = intval(Converter::bn2en($value[4]));
                         $data['roll'] = $roll;
-                        $SubCode = $value[7];
+                        $SubCode = $value[6];
                         $data['SubCode'] = $SubCode;
-                        $ca = $value[8];
-                        $data['ca'] = $ca;
-                        $mcq = $value[9];
-                        $data['mcq'] = $mcq;
-                        $cq = $value[10];
+                        $cq = $value[7];
                         $data['cq'] = $cq;
-                        $pra = $value[11];
+                        $ca =  null;
+                        $data['ca'] = $ca;
+                        $mcq = null;
+                        $data['mcq'] = $mcq;
+                        $pra = null;
                         $data['pra'] = $pra;
 
-                        debug($data);
+                       //debug($data);
                         $sql="INSERT INTO `marksinfo`(`ID`, `InsID`, `Shift`, `StuYear`, `ExamType`, `ClassName`, `Section`, `StuGroup`, `StuID`, `StuRoll`, `SubCode`, `SubMarks`, `ObjMarks`, `PraMarks`, `CT`, `CA`, `TotMarks`, `GP`, `LG`, `Fail`, `ExtraFourthGP`) VALUES
                         (null,111842,'$shift',2023,'Half Yearly','$class','$section','$group','$StuID','$roll','$SubCode','$cq','$mcq','$pra',null,'$ca',0,0,'','',0)";
                            //echo '<br><br>';
-                     // $result=$con->query($sql);
+                       //$result=$con->query($sql);
                     }
             }else {
                 echo SimpleXLSX::parseError();
